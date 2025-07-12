@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WildGuard</title>
+    <link rel="stylesheet" href="static/css/style.css?v=1.23">
+</head>
+<body>
+    <header>
+        <div id="logo">
+            <img src="static/img/logo-2.png" alt="logo">
+            WildGuard
+        </div>  
+    </header>
+    <section>
+        <div id="clients-control">
+            <div id="clients-control-header">
+                <h1>Clients</h1>
+                <div id="clients-header-buttons">
+                    <button class="clients-button" id="restore-button">
+                        <img src="static/img/reset.png" alt="">
+                        <span>Restore</span>
+                    </button>
+                    <button  class="clients-button" id="backup-button">
+                        <img src="static/img/data.png" alt="">
+                        <span>Backup</span>
+                    </button>
+                    <button class="clients-button" id="new-button">
+                        <img src="static/img/plus.png" alt="">
+                        <span>New</span>
+                    </button>
+                </div>
+            </div>
+            <div id="clients-list">
+                <!-- <div class="client-card">
+                    <div class="client-content">
+                      <div class="client-info">
+                        <img src="static/img/user.png" alt="User">
+                        <span>[user.name value]</span>
+                        <span>[user.allowedIPs value]</span>
+                      </div>
+                      <div class="client-speed">
+                        <span>[user.received value]</span>
+                        <span>[user.send value]</span>
+                        <span>[user.latestHandshake value]</span>
+                      </div>
+                    </div>
+                    <div class="client-buttons">
+                      <button class="button-on-off">
+                        <div class="circle"></div>
+                      </button>
+                      <button class="showQrBtn">
+                        <a>
+                          <img src="static/img/qr.png" alt="QR">
+                        </a>
+                      </button>
+                      <button>
+                        <a>
+                          <img src="static/img/download.jpg" alt="Download">
+                        </a>
+                      </button>
+                      <button>
+                        <a>
+                          <img src="static/img/delete.png" alt="Delete">
+                        </a>
+                      </button>
+                    </div>
+                  </div>
+            </div> -->
+        </div>
+    </section>
+
+    <div id="qrModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <img id="qrImage" src="" alt="QR Code">
+        </div>
+    </div>
+
+    <script src="static/js/ebal.js?v=1.2.3"></script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WireGuard Admin Panel</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { font-family: Arial, sans-serif; background: #f4f4f4; display: flex; flex-direction: column; }
+    .header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #007bff; color: #fff; }
+    .btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+    .btn-primary { background-color: #007bff; color: #fff; }
+    .btn-secondary { background-color: #6c757d; color: #fff; }
+    .btn-danger { background-color: #dc3545; color: #fff; }
+    #userList { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .user-row { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 0.75rem; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .user-info { display: flex; align-items: center; gap: 0.5rem; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot.online { background: #28a745; }
+    .dot.offline { background: #6c757d; }
+    .details { font-size: 0.8rem; color: #555; margin-left: 1rem; }
+    .user-actions { display: flex; align-items: center; }
+    .user-actions > * { margin-left: 0.5rem; }
+    .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal.active { display: flex; }
+    .modal-content { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); width: 320px; max-width: 90%; }
+    .modal-content h2 { margin-bottom: 1rem; font-size: 1.2rem; }
+    .modal-content input { width: 100%; padding: 0.5rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 0.5rem; }
+    body.modal-open { overflow: hidden; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>WireGuard Admin Panel</h1>
+    <button class="btn btn-primary" id="openCreateModalBtn">Добавить пользователя</button>
+  </div>
+
+  <div id="userList"></div>
+
+  <!-- Create User Modal -->
+  <div class="modal" id="createModal">
+    <div class="modal-content">
+      <h2>Создать пользователя</h2>
+      <input type="text" id="createNameInput" placeholder="Имя пользователя" />
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="createUserBtn">Создать</button>
+        <button class="btn btn-secondary" id="cancelCreateBtn">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rename User Modal -->
+  <div class="modal" id="renameModal">
+    <div class="modal-content">
+      <h2>Переименовать пользователя</h2>
+      <input type="text" id="renameInput" placeholder="Новое имя пользователя" />
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="renameUserBtn">Переименовать</button>
+        <button class="btn btn-secondary" id="cancelRenameBtn">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Modal -->
+  <div class="modal" id="qrModal">
+    <div class="modal-content">
+      <h2>QR Code</h2>
+      <img id="qrImage" src="" alt="QR Code" style="width:100%; margin-bottom:1rem;" />
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="closeQrBtn">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const body = document.body;
+      const userList = document.getElementById('userList');
+
+      const createModal = document.getElementById('createModal');
+      const openCreateModalBtn = document.getElementById('openCreateModalBtn');
+      const createNameInput = document.getElementById('createNameInput');
+      const createUserBtn = document.getElementById('createUserBtn');
+      const cancelCreateBtn = document.getElementById('cancelCreateBtn');
+
+      const renameModal = document.getElementById('renameModal');
+      const renameInput = document.getElementById('renameInput');
+      const renameUserBtn = document.getElementById('renameUserBtn');
+      const cancelRenameBtn = document.getElementById('cancelRenameBtn');
+
+      const qrModal = document.getElementById('qrModal');
+      const closeQrBtn = document.getElementById('closeQrBtn');
+      const qrImage = document.getElementById('qrImage');
+
+      let userToRename = null;
+
+      function openModal(modal) { modal.classList.add('active'); body.classList.add('modal-open'); }
+      function closeModal(modal) { modal.classList.remove('active'); body.classList.remove('modal-open'); }
+
+      // Create user
+      openCreateModalBtn.addEventListener('click', () => {
+        createNameInput.value = '';
+        openModal(createModal);
+        createNameInput.focus();
+      });
+      cancelCreateBtn.addEventListener('click', () => closeModal(createModal));
+      createUserBtn.addEventListener('click', async () => {
+        const name = createNameInput.value.trim(); if (!name) return;
+        await fetch('/api/users', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ username: name }) });
+        closeModal(createModal);
+        loadUsers();
+      });
+
+      // Rename user
+      cancelRenameBtn.addEventListener('click', () => closeModal(renameModal));
+      renameUserBtn.addEventListener('click', async () => {
+        const newName = renameInput.value.trim(); if (!newName || !userToRename) return;
+        await fetch(`/api/users/${userToRename}`, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ new_username: newName }) });
+        closeModal(renameModal);
+        loadUsers();
+      });
+
+      // QR modal
+      closeQrBtn.addEventListener('click', () => closeModal(qrModal));
+
+      async function loadUsers() {
+        try {
+          const res = await fetch('/api/getInfo');
+          const data = await res.json();
+          renderUsers(data.users || []);
+        } catch (e) { console.error('Fetch error', e); }
+      }
+
+      function renderUsers(users) {
+        userList.innerHTML = '';
+        users.forEach(u => {
+          const row = document.createElement('div'); row.className = 'user-row';
+          const info = document.createElement('div'); info.className = 'user-info';
+          const dot = document.createElement('span'); dot.className = `dot ${u.isOnline ? 'online' : 'offline'}`;
+          const nameEl = document.createElement('span'); nameEl.textContent = u.name;
+          info.append(dot, nameEl);
+
+          const details = document.createElement('div'); details.className = 'details';
+          details.innerHTML = `<div>IPs: ${u.allowedIPs}</div><div>Rx: ${u.received || '0'}</div><div>Tx: ${u.send || '0'}</div><div>Last: ${u.latestHandshake || 'n/a'}</div>`;
+          info.append(details);
+
+          const actions = document.createElement('div'); actions.className = 'user-actions';
+          const toggle = document.createElement('input'); toggle.type = 'checkbox'; toggle.checked = u.isEnable;
+          toggle.addEventListener('change', async () => { await fetch(`/api/users/${u.name}/status`, { method: 'PUT' }); loadUsers(); });
+          actions.append(toggle);
+
+          const btn = (txt, cls, fn) => { const b = document.createElement('button'); b.textContent = txt; b.className = `btn btn-secondary ${cls||''}`; b.onclick = fn; return b; };
+          actions.append(btn('QR','', async () => { const r = await fetch(`/api/users/${u.name}/qrcode`); const blob = await r.blob(); qrImage.src = URL.createObjectURL(blob); openModal(qrModal); }));
+          actions.append(btn('Config','', () => location.href = `/api/users/${u.name}/config`));
+          actions.append(btn('Rename','', () => { userToRename = u.name; renameInput.value = ''; openModal(renameModal); renameInput.focus(); }));
+          actions.append(btn('Delete','btn-danger', async () => { if (confirm(`Удалить ${u.name}?`)) { await fetch(`/api/users/${u.name}`, { method: 'DELETE' }); loadUsers(); }}));
+
+          row.append(info, actions);
+          userList.append(row);
+        });
+      }
+
+      loadUsers(); setInterval(loadUsers, 5000);
+    });
+  </script>
+</body>
+</html>

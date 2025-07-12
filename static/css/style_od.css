@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+* {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 500;
+}
+
+button {
+    cursor: pointer;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    background: none;
+    border: none;
+}
+
+header {
+    display: flex;
+    margin: 0 20%;
+}
+
+#logo {
+    height: 10rem;
+
+    padding: 2vh;
+    display: flex;
+    align-items: center;
+    grid-gap: 2vh;
+
+    font-family: "Open Sans", sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    letter-spacing: 2px;
+}
+
+header img {
+    height: 10rem;
+}
+
+#clients-control {
+    margin: 2vh 20%;
+    height: 100%;
+    border: 1px rgb(219, 217, 217) solid;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 5px;
+
+    /* box-shadow: 0px 0px 5px 1px rgba(155, 155, 155, 0.5); */
+}
+
+#clients-control-header {
+    display: flex;
+    align-items: center;
+    padding: 2vh;
+
+    height: 3rem;
+    
+    justify-content: space-between;
+
+    border: 1px rgb(177, 176, 176) solid;
+}
+
+#clients-control-header h1 {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+
+    color: rgb(66, 66, 66);
+}
+
+#clients-header-buttons {
+    display: flex;
+    align-items: center;
+
+    grid-gap: 1vh;
+}
+
+.clients-button {
+    display: flex;
+    align-items: center;
+    grid-gap: 1vh;
+
+    color: rgb(66, 66, 66);
+
+    padding: 1vh;
+
+
+    border: 1px rgb(177, 176, 176) solid;
+    border-radius: 5px;
+
+    transition: background-color border 500ms ease;
+}
+
+.clients-button:hover {
+    cursor: pointer;
+    background-color: rgb(151, 151, 151);
+    color: rgb(26, 25, 25);
+    border: 1px rgb(151, 151, 151) solid;
+}
+
+.clients-button span {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+}
+
+.clients-button img {
+    height: 1.5rem;
+}
+
+.error {
+    color: red;
+}
+
+#clients-list {
+    display: grid;
+    grid-gap: 0.5rem;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    margin-top: 1rem;
+}
+
+.client-info img {
+    height: 3rem;
+}
+
+.client-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 1rem 0.5rem;
+
+    border:1px rgb(177, 176, 176) solid;
+}
+
+.client-content {
+    display: flex;
+}
+
+.client-info {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: repeat(2, auto);
+    column-gap: 1rem;
+
+    margin-right: 2rem;
+}
+
+.client-info span {
+    font-size: 17px;
+}
+
+.client-info span:last-child {
+    font-size: 13px;
+}
+
+.client-info img {
+    grid-row: 1 / -1;
+}
+
+.client-speed {
+    display: flex;
+    align-self: end;
+    
+    padding-bottom: 0.4rem;
+
+    font-size: 13px;
+    font-style: italic;
+}
+
+.client-speed span:first-child {
+    margin-right: 0.5rem;
+}
+
+.client-speed span:last-child {
+    margin-left: 1.3rem;
+}
+
+.client-buttons {
+    display: flex;
+    align-items: center;
+
+    grid-gap: 0.5rem;
+}
+
+a img {
+    opacity: 0.6;
+
+    height: 2.3rem;
+}
+
+
+.button-on-off {
+    width: 80px;
+    height: 40px;
+    border-radius: 70px;
+    margin-right: 3rem;
+    background-color: rgb(211, 211, 211);
+    position: relative;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    box-sizing: border-box;
+    transition: background-color 0.4s ease;
+    overflow: hidden;
+}
+
+.button-on-off.active {
+    background-color: #ff6b6b;
+}
+
+.circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #fff;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    transition: all 0.4s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.button-on-off.active .circle {
+    left: calc(100% - 35px);
+}
+
+.button-on-off:active .circle {
+    transform: scale(0.9);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+  
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 1.5rem;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+    position: relative;
+}
+  
+.close {
+    color: #aaa;
+    position: absolute;
+    right: 10px;
+    top: 0px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+  
+.close:hover {
+    color: black;
+}
+  
+#qrImage {
+    max-width: 100%;
+    height: auto;
+    margin-top: 15px;
+}

@@ -1,0 +1,9 @@
+{
+    "interface": {
+      "private_key": "kLNvn8CuunUJ4NvTqlc8xUYbI9SkD5d6bKmsdY05NUM=",
+      "address": "10.0.0.1/24",
+      "listen_port": 51820
+    },
+    "peers": []
+  }
+  

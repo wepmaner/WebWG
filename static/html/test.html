@@ -1,0 +1,107 @@
+<!-- Добавить в секцию header внутри существующего кода -->
+<div class="user-profile">
+    <div class="user-info">
+        <span class="user-name">${username}</span>
+        <div class="online-status ${isOnline ? 'online' : 'offline'}"></div>
+    </div>
+    <div class="user-menu">
+        <button class="user-menu-btn">▼</button>
+        <div class="dropdown-content">
+            <a href="/profile">Профиль</a>
+            <a href="/settings">Настройки</a>
+            <button onclick="logout()">Выйти</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-name {
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.online-status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.online-status.online {
+    background: #28a745;
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.3);
+}
+
+.online-status.offline {
+    background: #dc3545;
+}
+
+.user-menu-btn {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.user-menu-btn:hover {
+    background: #f8f9fa;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 0.5rem;
+    min-width: 150px;
+    z-index: 100;
+}
+
+.dropdown-content a, 
+.dropdown-content button {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    text-align: left;
+    background: none;
+    border: none;
+    color: #1a1a1a;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.dropdown-content a:hover,
+.dropdown-content button:hover {
+    background: #f8f9fa;
+}
+
+.user-menu:hover .dropdown-content {
+    display: block;
+}
+</style>
+
+<script>
+function logout() {
+    fetch('/api/logout', { method: 'POST' })
+        .then(() => window.location = '/login');
+}
+</script>
