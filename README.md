@@ -49,6 +49,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 3. Установить зависимости:
+
 Через pip:
 ```bash
 pip install --upgrade pip
