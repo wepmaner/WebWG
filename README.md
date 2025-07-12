@@ -40,7 +40,7 @@
 
 1. Клонировать репозиторий и перейти в каталог проекта:
 ```bash
-git clone https://github.com/youruser/webwg.git
+git clone https://github.com/wepmaner/webwg.git
 cd webwg
 ```
 2. Создать и активировать виртуальное окружение:
@@ -49,9 +49,15 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 3. Установить зависимости:
+Через pip:
 ```bash
 pip install --upgrade pip
 pip install -r requirements.txt
+```
+Через uv:
+```bash
+uv venv
+uv sync
 ```
 4. Подготовить конфиг WireGuard (/etc/wireguard/wg0.conf) и JSON‑хранилище (peers.json).
 5. Запустить сервис в режиме разработки:
