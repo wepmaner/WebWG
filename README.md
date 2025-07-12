@@ -40,7 +40,7 @@
 
 1. Клонировать репозиторий и перейти в каталог проекта:
 ```bash
-git clone https://github.com/youruser/webwg.git
+git clone https://github.com/wepmaner/webwg.git
 cd webwg
 ```
 2. Создать и активировать виртуальное окружение:
